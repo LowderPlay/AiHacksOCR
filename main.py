@@ -20,7 +20,7 @@ from Levenshtein import distance as levenshtein_distance
 from functools import cmp_to_key
 
 trained_model_craft = './craft_mlt_25k.pth'
-trained_model_recognition = 'recognition/best_accuracy (1).pth'
+trained_model_recognition = 'recognition/best_accuracy (2).pth'
 output = './out/'
 cuda = False
 
@@ -95,7 +95,7 @@ if __name__ == '__main__':
     num_class = len(converter.character)
     input_channel = 3
     opt = {
-        'Transformation': 'None',
+        'Transformation': 'TPS',
         'Prediction': 'Attn',
         'SequenceModeling': 'BiLSTM',
         'FeatureExtraction': 'ResNet',
@@ -109,6 +109,7 @@ if __name__ == '__main__':
         'workers': 4,
         'rgb': True,
         'batch_max_length': 25,
+        'num_fiducial': 20
     }
     print('loading recognition model')
     model = Model(opt)
@@ -122,7 +123,7 @@ if __name__ == '__main__':
 
     points = np.empty(1)
     correct = 0
-    for indx, (index, row) in tqdm(enumerate(df.sample(n=50, random_state=0).iterrows()), total=50): #.sample(n=5)
+    for indx, (index, row) in tqdm(enumerate(df.sample(n=10, random_state=0).iterrows()), total=10): #.sample(n=5)
         image = imgproc.loadImage(os.path.join(dataset, row['image_path']))
         areas = json.loads(row['output'])[0]
         output_areas = []
